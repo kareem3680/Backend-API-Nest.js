@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, VersioningType, Logger } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import compression from 'compression';
 import { appConfig } from './config/configuration';
+import { LoggerService } from './common/utils/logger.util';
 
-const logger = new Logger('Bootstrap');
+const logger = new LoggerService('Bootstrap');
 
 async function bootstrap(): Promise<void> {
   const isProduction = process.env.NODE_ENV === 'production';
@@ -51,8 +52,8 @@ async function bootstrap(): Promise<void> {
   app.enableShutdownHooks();
 
   await app.listen(config.port);
-  logger.log(`Environment: ${config.nodeEnv}`);
-  logger.log(`Server running on port ${config.port}`);
+  logger.info(`Environment: ${config.nodeEnv}`);
+  logger.info(`Server running on port ${config.port}`);
 }
 
 process.on('unhandledRejection', (reason: unknown) => {
@@ -63,11 +64,11 @@ process.on('unhandledRejection', (reason: unknown) => {
 });
 
 process.on('uncaughtException', (error: Error) => {
-  logger.error(`Uncaught Exception: ${error.message}`, error.stack);
+  logger.error(`Uncaught Exception: ${error.message}`, { stack: error.stack });
   process.exit(1);
 });
 
 bootstrap().catch((error: Error) => {
-  logger.error(`Bootstrap failed: ${error.message}`, error.stack);
+  logger.error(`Bootstrap failed: ${error.message}`, { stack: error.stack });
   process.exit(1);
 });

@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { DataSource } from 'typeorm';
 import { User } from './modules/identity/entities/user.entity';
 import { seedConfig } from './config/seed.config';
+import { LoggerService } from './common/utils/logger.util';
+
+const logger = new LoggerService('Seed');
 
 async function seed(): Promise<void> {
-  const logger = new Logger('Seed');
   const app = await NestFactory.createApplicationContext(AppModule);
   const configService = app.get(ConfigService);
   const dataSource = app.get(DataSource);
@@ -29,16 +30,15 @@ async function seed(): Promise<void> {
     });
 
     await userRepository.save(superAdmin);
-    logger.log(`Super Admin created: ${config.superAdminEmail}`);
+    logger.info(`Super Admin created: ${config.superAdminEmail}`);
   } else {
-    logger.log('Super Admin already exists');
+    logger.info('Super Admin already exists');
   }
 
   await app.close();
 }
 
 seed().catch((error: Error) => {
-  const logger = new Logger('Seed');
-  logger.error(`Seed failed: ${error.message}`);
+  logger.error(`Seed failed: ${error.message}`, { stack: error.stack });
   process.exit(1);
 });

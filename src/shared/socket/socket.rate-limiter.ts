@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { socketConfig } from '../../config/socket.config';
+import { LoggerService } from '../../common/utils/logger.util';
 
 interface RateLimitEntry {
   timestamps: number[];
@@ -8,7 +9,7 @@ interface RateLimitEntry {
 
 @Injectable()
 export class SocketRateLimiter {
-  private readonly logger = new Logger(SocketRateLimiter.name);
+  private readonly logger = new LoggerService(SocketRateLimiter.name);
   private readonly windowMs: number;
   private readonly maxRequests: number;
   private readonly ttlMs: number;
@@ -111,6 +112,6 @@ export class SocketRateLimiter {
       this.cleanupInterval = null;
     }
     this.socketRequests.clear();
-    this.logger.log('Socket rate limiter destroyed');
+    this.logger.info('Socket rate limiter destroyed');
   }
 }

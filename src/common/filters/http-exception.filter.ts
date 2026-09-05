@@ -4,15 +4,15 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { ApiError } from '../exceptions/api-error.exception';
+import { LoggerService } from '../../common/utils/logger.util';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name);
+  private readonly logger = new LoggerService(HttpExceptionFilter.name);
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -57,7 +57,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const logMessage = `${request.method} ${request.url} - ${statusCode} - ${message}`;
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
-      this.logger.error(logMessage, errorStack);
+      this.logger.error(logMessage, { stack: errorStack });
     } else {
       this.logger.warn(logMessage);
     }

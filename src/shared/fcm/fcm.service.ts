@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   cert,
@@ -16,10 +15,11 @@ import {
   FcmSendToUsersResult,
   UserTokenInfo,
 } from './interfaces/fcm.interface';
+import { LoggerService } from '../../common/utils/logger.util';
 
 @Injectable()
 export class FcmService implements OnModuleInit {
-  private readonly logger = new Logger(FcmService.name);
+  private readonly logger = new LoggerService(FcmService.name);
   private initialized = false;
 
   constructor(private configService: ConfigService) {}
@@ -55,12 +55,11 @@ export class FcmService implements OnModuleInit {
       });
 
       this.initialized = true;
-      this.logger.log('Firebase Admin SDK initialized successfully');
+      this.logger.info('Firebase Admin SDK initialized successfully');
     } catch (error) {
-      this.logger.error(
-        'Failed to initialize Firebase Admin SDK',
-        error as Error,
-      );
+      this.logger.error('Failed to initialize Firebase Admin SDK', {
+        stack: (error as Error).stack,
+      });
       this.initialized = false;
     }
   }
@@ -92,7 +91,9 @@ export class FcmService implements OnModuleInit {
       const response = await getMessaging().send(message);
       return { success: 1, failed: 0, messageId: response };
     } catch (error) {
-      this.logger.error(`FCM send failed for token: ${token}`, error as Error);
+      this.logger.error(`FCM send failed for token: ${token}`, {
+        stack: (error as Error).stack,
+      });
       return { success: 0, failed: 1 };
     }
   }
@@ -134,7 +135,9 @@ export class FcmService implements OnModuleInit {
         failedTokens,
       };
     } catch (error) {
-      this.logger.error('FCM batch send failed', error as Error);
+      this.logger.error('FCM batch send failed', {
+        stack: (error as Error).stack,
+      });
       return { success: 0, failed: tokens.length, failedTokens: tokens };
     }
   }

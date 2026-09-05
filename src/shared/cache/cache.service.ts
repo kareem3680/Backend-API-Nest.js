@@ -1,12 +1,13 @@
-import { Injectable, Logger, Inject } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import type { Cache } from 'cache-manager';
 import { redisConfig } from '../../config/redis.config';
+import { LoggerService } from '../../common/utils/logger.util';
 
 @Injectable()
 export class CacheService {
-  private readonly logger = new Logger(CacheService.name);
+  private readonly logger = new LoggerService(CacheService.name);
   private readonly envPrefix: string;
   private readonly defaultTtl: number;
 
@@ -35,7 +36,9 @@ export class CacheService {
       this.logger.debug(`Cache MISS: ${fullKey}`);
       return null;
     } catch (error) {
-      this.logger.error(`Cache get error: ${key}`, error as Error);
+      this.logger.error(`Cache get error: ${key}`, {
+        stack: (error as Error).stack,
+      });
       return null;
     }
   }
@@ -53,7 +56,9 @@ export class CacheService {
       this.logger.debug(`Cache SET: ${fullKey} (TTL: ${ttlToUse}ms)`);
       return true;
     } catch (error) {
-      this.logger.error(`Cache set error: ${key}`, error as Error);
+      this.logger.error(`Cache set error: ${key}`, {
+        stack: (error as Error).stack,
+      });
       return false;
     }
   }
@@ -65,7 +70,9 @@ export class CacheService {
       this.logger.debug(`Cache DELETED: ${fullKey}`);
       return true;
     } catch (error) {
-      this.logger.error(`Cache delete error: ${key}`, error as Error);
+      this.logger.error(`Cache delete error: ${key}`, {
+        stack: (error as Error).stack,
+      });
       return false;
     }
   }

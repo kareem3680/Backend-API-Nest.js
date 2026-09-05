@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Request } from '../../common/interfaces/request.interface';
 import { isGlobalRole } from '../../common/constants';
+import { LoggerService } from '../../common/utils/logger.util';
 
 @Injectable()
 export class TenantService {
-  private readonly logger = new Logger(TenantService.name);
+  private readonly logger = new LoggerService(TenantService.name);
 
   getCompanyIdFromRequest(request: Request): string | null {
     const user = request.user;

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { ConfigService } from '@nestjs/config';
-import { Injectable, Inject, forwardRef, Logger } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { SocketRateLimiter } from './socket.rate-limiter';
 import { getUserRoom, getRoleRoom } from './helpers/socket.room-helper';
 import { emitSocketError } from './helpers/socket.error-handler';
@@ -22,6 +22,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from '../../modules/identity/users/repository/users.repository';
 import { JwtPayload } from '../../common/interfaces/jwt-payload.interface';
 import type { AuthenticatedSocket } from './interfaces/socket.interface';
+import { LoggerService } from '../../common/utils/logger.util';
 
 @Injectable()
 @WebSocketGateway({
@@ -38,7 +39,7 @@ export class SocketGateway
   server!: Server;
 
   private rateLimiter: SocketRateLimiter;
-  private readonly logger = new Logger(SocketGateway.name);
+  private readonly logger = new LoggerService(SocketGateway.name);
 
   constructor(
     private configService: ConfigService,
@@ -50,7 +51,7 @@ export class SocketGateway
   }
 
   afterInit(): void {
-    this.logger.log('Socket Gateway initialized');
+    this.logger.info('Socket Gateway initialized');
     this.server.use((socket: AuthenticatedSocket, next) => {
       this.handleAuth(socket)
         .then(() => next())
@@ -129,7 +130,7 @@ export class SocketGateway
       return;
     }
 
-    this.logger.log(
+    this.logger.info(
       `Client connected: ${client.id}, User: ${user._id}, Company: ${user.companyId || 'none'}, Role: ${user.role}`,
     );
 
@@ -153,7 +154,7 @@ export class SocketGateway
       this.logger.debug(`User ${user._id} joined role room: ${roleRoom}`);
     }
 
-    this.logger.log(
+    this.logger.info(
       `Client connected successfully: ${client.id}, User: ${user._id}`,
     );
   }
@@ -161,12 +162,12 @@ export class SocketGateway
   handleDisconnect(client: AuthenticatedSocket): void {
     const user = client.user;
     if (user) {
-      this.logger.log(
+      this.logger.info(
         `Client disconnected: ${client.id}, User: ${user._id}, Company: ${user.companyId}, Role: ${user.role}`,
       );
       this.rateLimiter.clearSocket(user._id, client.id);
     } else {
-      this.logger.log(`Client disconnected (unauthenticated): ${client.id}`);
+      this.logger.info(`Client disconnected (unauthenticated): ${client.id}`);
     }
   }
 

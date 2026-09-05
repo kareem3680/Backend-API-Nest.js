@@ -1,7 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { emailConfig } from '../../config/email.config';
+import { LoggerService } from '../../common/utils/logger.util';
 
 interface SendEmailOptions {
   email: string;
@@ -13,7 +14,7 @@ interface SendEmailOptions {
 
 @Injectable()
 export class EmailService {
-  private readonly logger = new Logger(EmailService.name);
+  private readonly logger = new LoggerService(EmailService.name);
   private readonly apiKey: string;
   private readonly from: string;
   private readonly brand: string;
@@ -96,7 +97,7 @@ export class EmailService {
           },
         },
       );
-      this.logger.log(`Email sent to ${email}`);
+      this.logger.info(`Email sent to ${email}`);
       return true;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -104,7 +105,9 @@ export class EmailService {
           `Email sending failed: ${JSON.stringify(error.response.data)}`,
         );
       } else {
-        this.logger.error(`Email sending failed: ${(error as Error).message}`);
+        this.logger.error(`Email sending failed: ${(error as Error).message}`, {
+          stack: (error as Error).stack,
+        });
       }
       throw new Error('Email could not be sent');
     }
