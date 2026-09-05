@@ -1,22 +1,34 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, VersioningType, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import compression from 'compression';
 import { appConfig } from './config/configuration';
 
+const logger = new Logger('Bootstrap');
+
 async function bootstrap(): Promise<void> {
-  const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: isProduction
+      ? ['error', 'warn', 'log']
+      : ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
+
   const configService = app.get(ConfigService);
   const config = appConfig(configService);
+
+  app.set('trust proxy', 1);
 
   app.use(helmet());
   app.use(compression());
 
   app.enableCors({
-    origin: config.allowedOrigins.split(','),
+    origin: config.allowedOrigins.split(',').map((origin) => origin.trim()),
+    credentials: true,
   });
 
   app.enableVersioning({
@@ -29,17 +41,33 @@ async function bootstrap(): Promise<void> {
     new ValidationPipe({
       whitelist: true,
       transform: true,
-      forbidNonWhitelisted: false,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
+
+  app.enableShutdownHooks();
 
   await app.listen(config.port);
   logger.log(`Environment: ${config.nodeEnv}`);
   logger.log(`Server running on port ${config.port}`);
 }
 
+process.on('unhandledRejection', (reason: unknown) => {
+  logger.error(
+    `Unhandled Rejection: ${reason instanceof Error ? reason.message : String(reason)}`,
+  );
+  process.exit(1);
+});
+
+process.on('uncaughtException', (error: Error) => {
+  logger.error(`Uncaught Exception: ${error.message}`, error.stack);
+  process.exit(1);
+});
+
 bootstrap().catch((error: Error) => {
-  const logger = new Logger('Bootstrap');
-  logger.error(`Bootstrap failed: ${error.message}`);
+  logger.error(`Bootstrap failed: ${error.message}`, error.stack);
   process.exit(1);
 });

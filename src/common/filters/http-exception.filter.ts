@@ -4,22 +4,26 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { ApiError } from '../exceptions/api-error.exception';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(private configService: ConfigService) {}
+  private readonly logger = new Logger(HttpExceptionFilter.name);
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  constructor(private readonly configService: ConfigService) {}
+
+  catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
-    let errorStack: string | undefined = undefined;
+    let errorStack: string | undefined;
 
     if (exception instanceof ApiError) {
       statusCode = exception.statusCode;
@@ -27,11 +31,22 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      message =
-        typeof exceptionResponse === 'string'
-          ? exceptionResponse
-          : ((exceptionResponse as Record<string, unknown>)
-              .message as string) || exception.message;
+
+      if (typeof exceptionResponse === 'string') {
+        message = exceptionResponse;
+      } else if (
+        exceptionResponse &&
+        typeof exceptionResponse === 'object' &&
+        'message' in exceptionResponse
+      ) {
+        const nestedMessage = (exceptionResponse as Record<string, unknown>)
+          .message;
+        message = Array.isArray(nestedMessage)
+          ? nestedMessage.join(', ')
+          : String(nestedMessage);
+      } else {
+        message = exception.message;
+      }
     } else if (exception instanceof Error) {
       message = exception.message;
       errorStack = exception.stack;
@@ -40,9 +55,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const isDevelopment =
       this.configService.get<string>('NODE_ENV') === 'development';
 
+    const logMessage = `${request.method} ${request.url} - ${statusCode} - ${message}`;
+    if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(logMessage, errorStack);
+    } else {
+      this.logger.warn(logMessage);
+    }
+
     const responseBody: Record<string, unknown> = {
       status: statusCode >= HttpStatus.INTERNAL_SERVER_ERROR ? 'error' : 'fail',
-      message,
+      message:
+        statusCode >= HttpStatus.INTERNAL_SERVER_ERROR && !isDevelopment
+          ? 'Internal server error'
+          : message,
+      path: request.url,
+      timestamp: new Date().toISOString(),
     };
 
     if (isDevelopment && errorStack) {
