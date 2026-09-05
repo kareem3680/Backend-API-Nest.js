@@ -105,7 +105,7 @@ export class UsersService {
     this.emailService
       .sendEmail({
         email: newUser.email!,
-        subject: 'Welcome to Backend Food-Tech!',
+        subject: 'Welcome to Backend API!',
         message:
           'Your account has been successfully created!\nThank you for joining us.',
       })

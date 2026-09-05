@@ -1,8 +1,8 @@
-# Backend - Food Tech API Documentation
+# Backend-API Documentation
 
 ## Overview
 
-This API is designed for the **Backend Food Technology Platform**.
+This API is designed for the **Backend API Technology Platform**.
 It is built using a **Multi-Tenant Architecture**, where each company operates in a completely isolated environment with its own data and users.
 
 Built with **NestJS** + **TypeScript** and backed by **PostgreSQL**.
