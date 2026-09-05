@@ -1,11 +1,34 @@
 {
   "info": {
-    "_postman_id": "9917e6b3-9650-4744-8cdd-c611e29f5512",
+    "_postman_id": "c563b9ec-339e-40df-89c7-1919dcb01620",
     "name": "Backend - API - Nest.js",
-    "schema": "https://schema.getpostman.com/collection/v2.1.0/collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "38670371"
   },
   "item": [
+    {
+      "name": "Welcome",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{MainHost}}/api/v1",
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
     {
       "name": "Identity",
       "item": [
@@ -48,8 +71,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/auth/refresh",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "auth", "refresh"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
             }
           },
           "response": []
@@ -93,8 +123,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/auth/sign-up",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "auth", "sign-up"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "sign-up"
+              ]
             }
           },
           "response": []
@@ -105,30 +142,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "let response = pm.response.json();",
-                  "",
-                  "let accessToken =",
-                  "  response?.accessToken ||",
-                  "  response?.data?.accessToken ||",
-                  "  response?.data?.tokens?.accessToken;",
-                  "",
-                  "let refreshToken =",
-                  "  response?.refreshToken ||",
-                  "  response?.data?.refreshToken ||",
-                  "  response?.data?.tokens?.refreshToken;",
-                  "",
-                  "if (accessToken) {",
-                  "  pm.environment.set(\"JWT\", accessToken);",
-                  "}",
-                  "",
-                  "if (refreshToken) {",
-                  "  pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
-                  "}"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "let response = pm.response.json();\n\nlet accessToken =\n  response?.accessToken ||\n  response?.data?.accessToken ||\n  response?.data?.tokens?.accessToken;\n\nlet refreshToken =\n  response?.refreshToken ||\n  response?.data?.refreshToken ||\n  response?.data?.tokens?.refreshToken;\n\nif (accessToken) {\n  pm.environment.set(\"JWT\", accessToken);\n}\n\nif (refreshToken) {\n  pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\n}"
+                ]
               }
             }
           ],
@@ -142,7 +159,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"owner@test.com\",\n    \"password\": \"owner000\"\n}",
+              "raw": "{\n    \"email\": \"super@test.com\",\n    \"password\": \"Super@123456\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -151,8 +168,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/auth/log-in",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "auth", "log-in"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "log-in"
+              ]
             }
           },
           "response": []
@@ -188,8 +212,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/auth/log-out",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "auth", "log-out"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "log-out"
+              ]
             }
           },
           "response": []
@@ -216,8 +247,15 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/profile/me",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "profile", "me"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile",
+                "me"
+              ]
             }
           },
           "response": []
@@ -253,8 +291,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/profile/me",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "profile", "me"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile",
+                "me"
+              ]
             }
           },
           "response": []
@@ -321,8 +366,14 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/update-password",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "update-password"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "update-password"
+              ]
             }
           },
           "response": []
@@ -338,7 +389,9 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  ""
+                ],
                 "type": "text/javascript",
                 "packages": {},
                 "requests": {}
@@ -364,8 +417,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/forget-password/send-reset-code",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "forget-password", "send-reset-code"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "forget-password",
+                "send-reset-code"
+              ]
             }
           },
           "response": []
@@ -376,7 +436,9 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  ""
+                ],
                 "type": "text/javascript",
                 "packages": {},
                 "requests": {}
@@ -402,8 +464,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/forget-password/resend-reset-code",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "forget-password", "resend-reset-code"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "forget-password",
+                "resend-reset-code"
+              ]
             }
           },
           "response": []
@@ -414,7 +483,9 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  ""
+                ],
                 "type": "text/javascript",
                 "packages": {},
                 "requests": {}
@@ -440,8 +511,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/forget-password/verify-reset-code",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "forget-password", "verify-reset-code"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "forget-password",
+                "verify-reset-code"
+              ]
             }
           },
           "response": []
@@ -498,8 +576,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/forget-password/reset-password",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "forget-password", "reset-password"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "forget-password",
+                "reset-password"
+              ]
             }
           },
           "response": []
@@ -540,8 +625,14 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/companies",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "companies"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ]
             }
           },
           "response": []
@@ -577,8 +668,14 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/adminDashboard",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "adminDashboard"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "adminDashboard"
+              ]
             }
           },
           "response": []
@@ -605,8 +702,14 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/companies",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "companies"],
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "companies"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -699,7 +802,9 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/companies/2d9d8445-eea6-462d-b99e-875b2a76ae26",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -732,7 +837,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/companies/2d9d8445-eea6-462d-b99e-875b2a76ae26",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -765,7 +872,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/companies/31764944-a76e-4984-aa74-0f57728daeb1",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -798,7 +907,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/companies/deactivate/31764944-a76e-4984-aa74-0f57728daeb1",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -832,7 +943,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/companies/activate/31764944-a76e-4984-aa74-0f57728daeb1",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -866,7 +979,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/companies/31764944-a76e-4984-aa74-0f57728daeb1/users",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -970,9 +1085,15 @@
               }
             },
             "url": {
-              "raw": "{{MainHost}}/api/v1/adminDashboard",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "adminDashboard"]
+              "raw": "{{MainHost}}/api/v1/admin-dashboard",
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin-dashboard"
+              ]
             }
           },
           "response": []
@@ -998,9 +1119,15 @@
               }
             ],
             "url": {
-              "raw": "{{MainHost}}/api/v1/adminDashboard?filters[jobId][gte]=13",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "adminDashboard"],
+              "raw": "{{MainHost}}/api/v1/admin-dashboard",
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin-dashboard"
+              ],
               "query": [
                 {
                   "key": "sort",
@@ -1049,7 +1176,8 @@
                 },
                 {
                   "key": "filters[jobId][gte]",
-                  "value": "13"
+                  "value": "13",
+                  "disabled": true
                 }
               ]
             }
@@ -1077,12 +1205,14 @@
               }
             ],
             "url": {
-              "raw": "{{MainHost}}/api/v1/adminDashboard/a2642d41-3e09-4e52-93a4-9a75b5095263",
-              "host": ["{{MainHost}}"],
+              "raw": "{{MainHost}}/api/v1/admin-dashboard/a2642d41-3e09-4e52-93a4-9a75b5095263",
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
-                "adminDashboard",
+                "admin-dashboard",
                 "a2642d41-3e09-4e52-93a4-9a75b5095263"
               ]
             }
@@ -1120,7 +1250,9 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/admin-dashboard/61224d0d-94ca-4166-92b8-fd714e5d9761",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -1153,7 +1285,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/admin-dashboard/deactivate/a2642d41-3e09-4e52-93a4-9a75b5095263",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -1187,7 +1321,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/admin-dashboard/activate/a2642d41-3e09-4e52-93a4-9a75b5095263",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
@@ -1235,8 +1371,14 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/notifications",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "notifications"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ]
             }
           },
           "response": []
@@ -1272,8 +1414,15 @@
             },
             "url": {
               "raw": "{{MainHost}}/api/v1/notifications/send",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "notifications", "send"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "send"
+              ]
             }
           },
           "response": []
@@ -1300,8 +1449,14 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/notifications",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "notifications"],
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ],
               "query": [
                 {
                   "key": "sort",
@@ -1375,8 +1530,16 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/notifications/unread/count",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "notifications", "unread", "count"],
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "unread",
+                "count"
+              ],
               "query": [
                 {
                   "key": "sort",
@@ -1450,8 +1613,15 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/notifications/mark-all",
-              "host": ["{{MainHost}}"],
-              "path": ["api", "v1", "notifications", "mark-all"]
+              "host": [
+                "{{MainHost}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "mark-all"
+              ]
             }
           },
           "response": []
@@ -1478,7 +1648,9 @@
             ],
             "url": {
               "raw": "{{MainHost}}/api/v1/notifications/mark/380da77c-9e86-4b64-a097-5aec1e0c3b5c",
-              "host": ["{{MainHost}}"],
+              "host": [
+                "{{MainHost}}"
+              ],
               "path": [
                 "api",
                 "v1",
