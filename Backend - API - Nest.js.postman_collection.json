@@ -1,0 +1,1496 @@
+{
+  "info": {
+    "_postman_id": "9917e6b3-9650-4744-8cdd-c611e29f5512",
+    "name": "Backend - API - Nest.js",
+    "schema": "https://schema.getpostman.com/collection/v2.1.0/collection.json",
+    "_exporter_id": "38670371"
+  },
+  "item": [
+    {
+      "name": "Identity",
+      "item": [
+        {
+          "name": "Refresh Access Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "let accessToken = response.data?.accessToken;",
+                  "pm.environment.set(\"JWT\", accessToken);",
+                  "",
+                  "let refreshToken = response.data?.refreshToken;",
+                  "if (refreshToken) pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{REFRESH_TOKEN}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/auth/refresh",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign-Up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "let accessToken = response.accessToken;",
+                  "pm.environment.set(\"JWT\", accessToken);",
+                  "",
+                  "let refreshToken = response.refreshToken;",
+                  "pm.environment.set(\"REFRESH_TOKEN\", refreshToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Backend_SuperAdmin\",\n    \"email\": \"Backend_Super@test.com\",\n    \"profileImage\": \"\",\n    \"phone\": \"+201224415708\",\n    \"password\": \"Backend000\",\n    \"passwordConfirmation\": \"Backend000\",\n    \"position\": \"Director\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/auth/sign-up",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "auth", "sign-up"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log-In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "",
+                  "let accessToken =",
+                  "  response?.accessToken ||",
+                  "  response?.data?.accessToken ||",
+                  "  response?.data?.tokens?.accessToken;",
+                  "",
+                  "let refreshToken =",
+                  "  response?.refreshToken ||",
+                  "  response?.data?.refreshToken ||",
+                  "  response?.data?.tokens?.refreshToken;",
+                  "",
+                  "if (accessToken) {",
+                  "  pm.environment.set(\"JWT\", accessToken);",
+                  "}",
+                  "",
+                  "if (refreshToken) {",
+                  "  pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"owner@test.com\",\n    \"password\": \"owner000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/auth/log-in",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "auth", "log-in"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log-Out",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/auth/log-out",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "auth", "log-out"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Data",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/profile/me",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "profile", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update My Data",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/profile/me",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "profile", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change My Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "",
+                  "let accessToken =",
+                  "  response?.accessToken ||",
+                  "  response?.data?.accessToken ||",
+                  "  response?.data?.tokens?.accessToken;",
+                  "",
+                  "let refreshToken =",
+                  "  response?.refreshToken ||",
+                  "  response?.data?.refreshToken ||",
+                  "  response?.data?.tokens?.refreshToken;",
+                  "",
+                  "if (accessToken) {",
+                  "  pm.environment.set(\"JWT\", accessToken);",
+                  "}",
+                  "",
+                  "if (refreshToken) {",
+                  "  pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentPassword\": \"\",\n    \"newPassword\": \"\",\n    \"newPasswordConfirm\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/update-password",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "update-password"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Forget Password",
+      "item": [
+        {
+          "name": "Send Reset Code",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/forget-password/send-reset-code",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "forget-password", "send-reset-code"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Reset Code",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/forget-password/resend-reset-code",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "forget-password", "resend-reset-code"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Reset Code",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"resetCode\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/forget-password/verify-reset-code",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "forget-password", "verify-reset-code"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "",
+                  "let accessToken =",
+                  "  response?.accessToken ||",
+                  "  response?.data?.accessToken ||",
+                  "  response?.data?.tokens?.accessToken;",
+                  "",
+                  "let refreshToken =",
+                  "  response?.refreshToken ||",
+                  "  response?.data?.refreshToken ||",
+                  "  response?.data?.tokens?.refreshToken;",
+                  "",
+                  "if (accessToken) {",
+                  "  pm.environment.set(\"JWT\", accessToken);",
+                  "}",
+                  "",
+                  "if (refreshToken) {",
+                  "  pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"\",\n    \"newPassword\": \"\",\n    \"confirmNewPassword\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/forget-password/reset-password",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "forget-password", "reset-password"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Super-Admin Dashboard",
+      "item": [
+        {
+          "name": "Create Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Creative Marketing Establishment\",\n    \"nameAr\": \"Creative Marketing Establishment\",\n    \"nameEn\": \"Creative Marketing Establishment\",\n    \"email\": \"info@creativemarketing.com\",\n    \"phone\": \"+201551234567\",\n    \"whatsapp\": \"+201551234567\",\n    \"commercialRegisterNumber\": \"1010234567\",\n    \"country\": \"Saudi Arabia\",\n    \"politicalManager\": \"Sarah Khalid Al-Wakeet\",\n    \"activityType\": \"Marketing\",\n    \"legalData\": \"License No. 98765, issued by Ministry of Commerce\",\n    \"taxNumber\": \"123456789\",\n    \"legalEntityName\": \"Creative Marketing Trading Establishment\",\n    \"city\": \"Jeddah\",\n    \"legalState\": \"Active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "companies"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User In Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Company01 Admin\",\n    \"email\": \"Company01_Admin@test.com\",\n    \"profileImage\": \"profileImage.jpg\",\n    \"phone\": \"+201545800540\",\n    \"password\": \"Company01000\",\n    \"passwordConfirmation\": \"Company01000\",\n    \"position\": \"Admin\",\n    \"role\": \"admin\",\n    \"companyId\": \"c224f2a4-2828-496d-866a-1acb9dc1f4e9\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/adminDashboard",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "adminDashboard"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Companies",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "companies"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2024-01-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2024-12-31",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "keyword",
+                  "value": "marketing",
+                  "disabled": true
+                },
+                {
+                  "key": "searchFields",
+                  "value": "name,name_ar",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "fields",
+                  "value": "city",
+                  "disabled": true
+                },
+                {
+                  "key": "country",
+                  "value": "Saudi%20Arabia",
+                  "disabled": true
+                },
+                {
+                  "key": "pricePerMile[gte]",
+                  "value": "0.1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"\",\n    \"email\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies/2d9d8445-eea6-462d-b99e-875b2a76ae26",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "2d9d8445-eea6-462d-b99e-875b2a76ae26"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Company (Hard Delete)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies/2d9d8445-eea6-462d-b99e-875b2a76ae26",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "2d9d8445-eea6-462d-b99e-875b2a76ae26"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies/31764944-a76e-4984-aa74-0f57728daeb1",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "31764944-a76e-4984-aa74-0f57728daeb1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies/deactivate/31764944-a76e-4984-aa74-0f57728daeb1",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "deactivate",
+                "31764944-a76e-4984-aa74-0f57728daeb1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies/activate/31764944-a76e-4984-aa74-0f57728daeb1",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "activate",
+                "31764944-a76e-4984-aa74-0f57728daeb1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users For Single Company",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/companies/31764944-a76e-4984-aa74-0f57728daeb1/users",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "companies",
+                "31764944-a76e-4984-aa74-0f57728daeb1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "-jobId",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "jobId",
+                  "disabled": true
+                },
+                {
+                  "key": "fields",
+                  "value": "name phone",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2025-11-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-01",
+                  "disabled": true
+                },
+                {
+                  "key": "jobId[lte]",
+                  "value": "200",
+                  "disabled": true
+                },
+                {
+                  "key": "jobId[gte]",
+                  "value": "120",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "keyword",
+                  "value": "Flutter",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"\",\n    \"email\": \"\",\n    \"phone\": \"\",\n    \"password\": \"\",\n    \"passwordConfirmation\": \"\",\n    \"position\": \"\",\n    \"role\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/adminDashboard",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "adminDashboard"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/adminDashboard?filters[jobId][gte]=13",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "adminDashboard"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "-jobId",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "jobId",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2025-11-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-01",
+                  "disabled": true
+                },
+                {
+                  "key": "jobId[gte]",
+                  "value": "120",
+                  "disabled": true
+                },
+                {
+                  "key": "jobId",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "keyword",
+                  "value": "o",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "filters[jobId][gte]",
+                  "value": "13"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Specific User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/adminDashboard/a2642d41-3e09-4e52-93a4-9a75b5095263",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "adminDashboard",
+                "a2642d41-3e09-4e52-93a4-9a75b5095263"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/admin-dashboard/61224d0d-94ca-4166-92b8-fd714e5d9761",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "admin-dashboard",
+                "61224d0d-94ca-4166-92b8-fd714e5d9761"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/admin-dashboard/deactivate/a2642d41-3e09-4e52-93a4-9a75b5095263",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "admin-dashboard",
+                "deactivate",
+                "a2642d41-3e09-4e52-93a4-9a75b5095263"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/admin-dashboard/activate/a2642d41-3e09-4e52-93a4-9a75b5095263",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "admin-dashboard",
+                "activate",
+                "a2642d41-3e09-4e52-93a4-9a75b5095263"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Create Notification (DB only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Test Notification\",\n    \"message\": \"Hello from Postman\",\n    \"module\": \"system\",\n    \"importance\": \"low\",\n    \"toRole\": [\"admin\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/notifications",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "notifications"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send Notification",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Test Notification\",\n    \"message\": \"Hello from Postman\",\n    \"module\": \"system\",\n    \"importance\": \"low\",\n    \"toUser\": [\"6a1feedb82b9c8d2c14e937c\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{MainHost}}/api/v1/notifications/send",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "notifications", "send"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Notifications",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/notifications",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "notifications"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "fields",
+                  "value": "message module",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2025-11-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-01",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "unread",
+                  "disabled": true
+                },
+                {
+                  "key": "keyword",
+                  "value": "United States",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Notifications Unread Count",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/notifications/unread/count",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "notifications", "unread", "count"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "fields",
+                  "value": "message module",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2025-11-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-01",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "unread",
+                  "disabled": true
+                },
+                {
+                  "key": "keyword",
+                  "value": "United States",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All As Read",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/notifications/mark-all",
+              "host": ["{{MainHost}}"],
+              "path": ["api", "v1", "notifications", "mark-all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Specific As Read",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{MainHost}}/api/v1/notifications/mark/380da77c-9e86-4b64-a097-5aec1e0c3b5c",
+              "host": ["{{MainHost}}"],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "mark",
+                "380da77c-9e86-4b64-a097-5aec1e0c3b5c"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
