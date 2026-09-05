@@ -1,26 +1,22 @@
 import { createLogger, format, transports, Logger } from 'winston';
-// import * as path from 'path';
-// import * as fs from 'fs';
+import * as path from 'path';
+import * as fs from 'fs';
 
 const { combine, printf, colorize } = format;
 
 const logDir = process.env.LOG_PATH || 'logs';
-
-// TEMP: Disabled for Vercel
-// if (!fs.existsSync(logDir)) {
-//   fs.mkdirSync(logDir, { recursive: true });
-// }
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir, { recursive: true });
+}
 
 const dateFormat = () =>
   new Date().toLocaleString('en-EG', { timeZone: 'Africa/Cairo' });
 
 const customFormat = printf(({ level, message, ...meta }) => {
   let log = `${dateFormat()} | ${level.toUpperCase()} | ${String(message)}`;
-
   if (Object.keys(meta).length > 0) {
     log += ` | ${JSON.stringify(meta)}`;
   }
-
   return log;
 });
 
@@ -30,25 +26,17 @@ export class LoggerService {
 
   constructor(topic: string) {
     this.topic = topic;
-
-    // TEMP: Vercel - Console only
-    const loggerTransports = [
-      new transports.Console({
-        format: combine(customFormat, colorize({ all: true })),
-      }),
-    ];
-
-    // TEMP: Disabled on Vercel
-    // const filename = path.join(logDir, `${topic}.log`);
-
-    // loggerTransports.push(
-    //   new transports.File({ filename }),
-    // );
+    const filename = path.join(logDir, `${topic}.log`);
 
     this.logger = createLogger({
       level: process.env.LOG_LEVEL || 'info',
       format: combine(customFormat),
-      transports: loggerTransports,
+      transports: [
+        new transports.Console({
+          format: combine(customFormat, colorize({ all: true })),
+        }),
+        new transports.File({ filename }),
+      ],
     });
   }
 

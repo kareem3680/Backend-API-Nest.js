@@ -17,6 +17,8 @@ import { FcmModule } from './shared/fcm/fcm.module';
 import { IdentityModule } from './modules/identity/identity.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import configuration, { appConfig } from './config/configuration';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -50,7 +52,9 @@ import configuration, { appConfig } from './config/configuration';
     IdentityModule,
     NotificationsModule,
   ],
+  controllers: [AppController],
   providers: [
+    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
