@@ -9,6 +9,7 @@ import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { ApiError } from '../exceptions/api-error.exception';
 import { LoggerService } from '../../common/utils/logger.util';
+import { shortenUserAgent } from '../../common/utils/user-agent.util';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -55,7 +56,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const isDevelopment =
       this.configService.get<string>('NODE_ENV') === 'development';
 
-    const logMessage = `${request.method} ${request.url} - ${statusCode} - ${message}`;
+    const clientInfo = shortenUserAgent(request.get('user-agent'));
+    const logMessage = `${request.method} ${request.url} ${statusCode} - ${message} - ${request.ip} ${clientInfo}`;
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error(logMessage, { stack: errorStack });
     } else {
